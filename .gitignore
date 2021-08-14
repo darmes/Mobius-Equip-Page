@@ -1,14 +1,13 @@
 _Archive/
-Audio/
-Data/
-Graphics/
-Mobius's Quest Journal Maker/
+Icons/
+EquipPageProject/
 *.rxdata
 *.exe
 *.ini
 *.rxproj
 *.zip
 *.jpg
+*.png
 *.db
 *.dll
 
