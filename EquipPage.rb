@@ -21,7 +21,7 @@ module Mobius
     # * Module constants
     #--------------------------------------------------------------------------
       ELEMENTS_TO_SHOW = [1,2,3,4,5,6]    # IDs of element types to show
-			STATES_TO_SHOW = [3,7,4,5]          # IDs of status types to show
+      STATES_TO_SHOW = [3,7,4,5]          # IDs of status types to show
   end
 end
 #==============================================================================
@@ -63,7 +63,7 @@ class Scene_Equip
     # If right window is active
     if @right_window.active
       # Erase parameters for after equipment change
-			@left_window.set_new_stats(nil)
+      @left_window.set_new_stats(nil)
     end
     # If item window is active
     if @item_window.active
@@ -74,18 +74,18 @@ class Scene_Equip
       last_sp = @actor.sp
       @actor.equip(@right_window.index, item2 == nil ? 0 : item2.id)
       # Get stats for after equipment change
-			stats = []
-			stats.push(@actor.equip_parameters)
-			stats.push(@actor.element_set)
-			stats.push(@actor.defense_element_set)
-			stats.push(@actor.plus_state_set)
-			stats.push(@actor.defense_state_set)
+      stats = []
+      stats.push(@actor.equip_parameters)
+      stats.push(@actor.element_set)
+      stats.push(@actor.defense_element_set)
+      stats.push(@actor.plus_state_set)
+      stats.push(@actor.defense_state_set)
       # Return equipment
       @actor.equip(@right_window.index, item1 == nil ? 0 : item1.id)
       @actor.hp = last_hp
       @actor.sp = last_sp
       # Draw in left window
-			@left_window.set_new_stats(stats)
+      @left_window.set_new_stats(stats)
     end
   end
 end
@@ -104,14 +104,14 @@ class Window_Base < Window
   #     y         : draw spot y-coordinate
   #--------------------------------------------------------------------------
   def draw_icon(icon_name, x, y)
-		# Load icon
-		begin
-			bitmap = RPG::Cache.icon(icon_name)
-		rescue
-			bitmap = Bitmap.new(24,24)
-			bitmap.fill_rect(bitmap.rect, Color.new(255,0,255)) 
-		end
-		# Copy icon to window
+    # Load icon
+    begin
+      bitmap = RPG::Cache.icon(icon_name)
+    rescue
+      bitmap = Bitmap.new(24,24)
+      bitmap.fill_rect(bitmap.rect, Color.new(255,0,255)) 
+    end
+    # Copy icon to window
     src_rect = Rect.new(0, 0, 24, 24)
     self.contents.blt(x, y, bitmap, src_rect)
   end
@@ -153,7 +153,7 @@ class Window_EquipItem < Window_Selectable
     when RPG::Armor
       number = $game_party.armor_number(item.id)
     end
-		draw_icon(item.icon_name, x, y + 4)
+    draw_icon(item.icon_name, x, y + 4)
     self.contents.font.color = normal_color
     self.contents.draw_text(x + 28, y, 212, 32, item.name, 0)
     self.contents.draw_text(x + 240, y, 16, 32, ":", 1)
@@ -184,50 +184,50 @@ class Window_EquipLeft < Window_Base
   def refresh
     self.contents.clear
     draw_actor_name(@actor, 4, 0)
-		draw_parameters
-		draw_elements
-    draw_states    
+    draw_parameters
+    draw_elements
+    draw_states
   end
   #--------------------------------------------------------------------------
   # * Set parameters after changing equipment
   #     stats  : array of arrays containing
   #       params          : array of atk, pdef, mdef, etc
   #       atk_element_set : array of element ids
-	#       def_element_set : array of element ids
+  #       def_element_set : array of element ids
   #       atk_state_set   : array of state ids
-	#       def_state_set   : array of state ids
+  #       def_state_set   : array of state ids
   #--------------------------------------------------------------------------
   def set_new_stats(stats)
     if @stats != stats
-				@stats = stats
-				refresh
+      @stats = stats
+      refresh
     end
   end
-	#--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Draw Parameters
   #--------------------------------------------------------------------------
   def draw_parameters
-		draw_new = false
-		if @stats != nil
-			params = @stats[0]
-			draw_new = true
-		end
-		for i in 0..6
-			draw_y = 32 + (32 * i)
-			draw_actor_parameter(@actor, 4, draw_y, i)
-			if draw_new
-				old_param = @actor.parameter_by_type(i)
-				new_param = params[i]
-				self.contents.font.color = system_color
-				self.contents.draw_text(160, draw_y, 40, 32, "->", 1)
-				self.contents.font.color = color_choose(old_param, new_param)
-				self.contents.draw_text(200, draw_y, 36, 32, new_param.to_s, 2)
-			end
-		end
+    draw_new = false
+    if @stats != nil
+      params = @stats[0]
+      draw_new = true
+    end
+    for i in 0..6
+      draw_y = 32 + (32 * i)
+      draw_actor_parameter(@actor, 4, draw_y, i)
+      if draw_new
+        old_param = @actor.parameter_by_type(i)
+        new_param = params[i]
+        self.contents.font.color = system_color
+        self.contents.draw_text(160, draw_y, 40, 32, "->", 1)
+        self.contents.font.color = color_choose(old_param, new_param)
+        self.contents.draw_text(200, draw_y, 36, 32, new_param.to_s, 2)
+      end
+    end
   end
-	#------------------------------------------------------------------------------
-	# * Color Choose - Decide text color based on whether the stat improves
-	#------------------------------------------------------------------------------
+  #------------------------------------------------------------------------------
+  # * Color Choose - Decide text color based on whether the stat improves
+  #------------------------------------------------------------------------------
   def color_choose(old_stat, new_stat)
     compare = (old_stat <=> new_stat)
     case compare
@@ -239,60 +239,60 @@ class Window_EquipLeft < Window_Base
       Color.new(255, 0, 0, 255) #Return red color
     end
   end
-	#--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Draw Elements
   #--------------------------------------------------------------------------
   def draw_elements
-		if @stats != nil
-			atk_element_set = @stats[1]
-			def_element_set = @stats[2]
-		else
-			atk_element_set = @actor.element_set
-			def_element_set = @actor.defense_element_set
-		end
-		draw_icon_set(atk_element_set, 4, 258, 'attack', :MobiusEquipPageElement)
-		draw_icon_set(def_element_set, 4, 292, 'defense', :MobiusEquipPageElement)
+    if @stats != nil
+      atk_element_set = @stats[1]
+      def_element_set = @stats[2]
+    else
+      atk_element_set = @actor.element_set
+      def_element_set = @actor.defense_element_set
+    end
+    draw_icon_set(atk_element_set, 4, 258, 'attack', :MobiusEquipPageElement)
+    draw_icon_set(def_element_set, 4, 292, 'defense', :MobiusEquipPageElement)
   end
-	#--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Draw States
   #--------------------------------------------------------------------------
   def draw_states
-		if @stats != nil
-			plus_state_set = @stats[3]
-			defense_state_set = @stats[4]
-		else
-			plus_state_set = @actor.plus_state_set
-			defense_state_set = @actor.defense_state_set
-		end
-		draw_icon_set(plus_state_set, 4, 326, 'attack', :MobiusEquipPageState)
-		draw_icon_set(defense_state_set, 4, 358, 'defense', :MobiusEquipPageState)
+    if @stats != nil
+      plus_state_set = @stats[3]
+      defense_state_set = @stats[4]
+    else
+      plus_state_set = @actor.plus_state_set
+      defense_state_set = @actor.defense_state_set
+    end
+    draw_icon_set(plus_state_set, 4, 326, 'attack', :MobiusEquipPageState)
+    draw_icon_set(defense_state_set, 4, 358, 'defense', :MobiusEquipPageState)
   end
-	#--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Draw Icon Set - Draws an icon set for a given actor set
   #     actor_set : an element or status set for a given actor; e.g. [2,5,6]
   #     x         : draw spot x-coordinate
   #     y         : draw spot y-coordinate
-	#     type      : 'attack' OR 'defense'
-	#     kind      : :MobiusEquipPageElement OR :MobiusEquipPageState
+  #     type      : 'attack' OR 'defense'
+  #     kind      : :MobiusEquipPageElement OR :MobiusEquipPageState
   #--------------------------------------------------------------------------
   def draw_icon_set(actor_set, x, y, type, kind)
-		if kind == :MobiusEquipPageElement
-			show_list = Mobius::EquipPage::ELEMENTS_TO_SHOW
-		else
-			show_list = Mobius::EquipPage::STATES_TO_SHOW
-		end
-		for i in 0...show_list.length
-			set_id = show_list[i]
-			enabled = actor_set.include?(set_id)
-			if kind == :MobiusEquipPageElement
-				name = $data_system.elements[set_id]
-			else
-				name = $data_states[set_id].name
-			end
-			filename = name + '-' + type + '-' + (enabled ? 'enabled' : 'disabled')
-			draw_x = x + (30 * i)
-			draw_icon(filename, draw_x, y)
-		end
+    if kind == :MobiusEquipPageElement
+      show_list = Mobius::EquipPage::ELEMENTS_TO_SHOW
+    else
+      show_list = Mobius::EquipPage::STATES_TO_SHOW
+    end
+    for i in 0...show_list.length
+      set_id = show_list[i]
+      enabled = actor_set.include?(set_id)
+      if kind == :MobiusEquipPageElement
+        name = $data_system.elements[set_id]
+      else
+        name = $data_states[set_id].name
+      end
+      filename = name + '-' + type + '-' + (enabled ? 'enabled' : 'disabled')
+      draw_x = x + (30 * i)
+      draw_icon(filename, draw_x, y)
+    end
   end
 end #class end
 
@@ -304,7 +304,7 @@ end #class end
 #==============================================================================
 
 class Game_Actor < Game_Battler
-	#--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Get a parameter by its type
   #--------------------------------------------------------------------------
   def parameter_by_type(type)
@@ -312,7 +312,7 @@ class Game_Actor < Game_Battler
     when 0
       return self.atk
     when 1
-			return self.pdef
+      return self.pdef
     when 2
       return self.mdef
     when 3
@@ -325,19 +325,19 @@ class Game_Actor < Game_Battler
       return self.int
     end
   end
-	#--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # * Get an array of an actor's parameters
   #--------------------------------------------------------------------------
   def equip_parameters
     return [
-			self.atk,
+      self.atk,
       self.pdef,
       self.mdef,
       self.str,
       self.dex,
       self.agi,
       self.int
-		]
+    ]
   end
   #--------------------------------------------------------------------------
   # * Get Normal Defense Elements
