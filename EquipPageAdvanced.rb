@@ -22,8 +22,8 @@ module Mobius
     #--------------------------------------------------------------------------
       ELEMENT_ATK = 1 # DON'T TOUCH
       ELEMENT_DEF = 2 # DON'T TOUCH
-      STATUS_ATK = 3  # DON'T TOUCH
-      STATUS_DEF = 4  # DON'T TOUCH
+      STATUS_ATK  = 3 # DON'T TOUCH
+      STATUS_DEF  = 4 # DON'T TOUCH
       ICONS_TO_SHOW = [
         # ROW 1
         [
